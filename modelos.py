@@ -32,47 +32,63 @@ from typing import List
 class Chansey(object):
 
     def __init__(self):
+        #creamos el avion
+
         # Figuras básicas
-        gpu_body_quad = es.toGPUShape(bs.createColorQuad(1, 0.8, 0.8))  # rosado
-        gpu_leg_quad = es.toGPUShape(bs.createColorQuad(1, 0.5, 1))  # rosado fuerte
-        gpu_eye_quad = es.toGPUShape(bs.createColorQuad(1, 1, 1))  # blanco
-        # ... triangulos
+        gpu_body_quad   = es.toGPUShape(bs.createColorQuad(0.65, 0.65, 0.65))      # gris
+        gpu_tail_triangle   = es.toGPUShape(bs.createColorTriangle(0.65, 0.65, 0.65))  # gris
+        gpu_nose_triangle   = es.toGPUShape(bs.createColorTriangle(0.65, 0.65, 0.65))  # gris
+        gpu_wing_quad = es.toGPUShape(bs.createColorQuad(0.32, 0.32, 0.32))  # gris oscuro
+        gpu_window_quad = es.toGPUShape(bs.createColorQuad(0, 1, 0.86))  # celeste
+
+        #creamos el "cuerpo"
 
         body = sg.SceneGraphNode('body')
-        body.transform = tr.uniformScale(1)
+        body.transform = tr.scale(2.5,0.7,1)  #alargamos el "cuerpo" del avion
         body.childs += [gpu_body_quad]
 
-        # Creamos las piernas
-        leg = sg.SceneGraphNode('leg')  # pierna generica
-        leg.transform = tr.scale(0.25, 0.25, 1)
-        leg.childs += [gpu_leg_quad]
+        # Creamos las ventanas
+        window = sg.SceneGraphNode('window')  # ventana generica
+        window.transform = tr.scale(0.25, 0.25, 1)
+        window.childs += [gpu_window_quad]
 
-        # Izquierda
-        leg_izq = sg.SceneGraphNode('legLeft')
-        leg_izq.transform = tr.translate(-0.5, -0.5, 0)  # tr.matmul([])..
-        leg_izq.childs += [leg]
+                # prueba dos ventanas
+        window_1 = sg.SceneGraphNode('window_1')
+        window_1.transform = tr.translate(1, 0.14, 0)  # tr.matmul([])..
+        window_1.childs += [window]
 
-        leg_der = sg.SceneGraphNode('legRight')
-        leg_der.transform = tr.translate(0.5, -.5, 0)
-        leg_der.childs += [leg]
+        window_2 = sg.SceneGraphNode('window_2')
+        window_2.transform = tr.translate(0.65, 0.14, 0)  # tr.matmul([])..
+        window_2.childs += [window]
 
-        # Ojitos
-        eye = sg.SceneGraphNode('eye')
-        eye.transform = tr.scale(0.25, 0.25, 1)
-        eye.childs += [gpu_eye_quad]
+        window_3 = sg.SceneGraphNode('window_3')
+        window_3.transform = tr.translate(0.3, 0.14, 0)  # tr.matmul([])..
+        window_3.childs += [window]
 
-        eye_izq = sg.SceneGraphNode('eyeLeft')
-        eye_izq.transform = tr.translate(-0.3, 0.5, 0)
-        eye_izq.childs += [eye]
+        # cola
+        tail = sg.SceneGraphNode('tail') #ventana generica
+        tail.transform = tr.rotationZ(0.46) #dejamos el borde trasero del triangulo ortogonal al cuerpo uwu
+        tail.childs += [gpu_tail_triangle]
 
-        eye_der = sg.SceneGraphNode('eyeRight')
-        eye_der.transform = tr.translate(0.3, 0.5, 0)
-        eye_der.childs += [eye]
+        tail_back = sg.SceneGraphNode('eyeLeft')
+        tail_back.transform = tr.matmul([tr.translate(-1.0092, 0.4, 0), tr.scale(1.1,1.1,0)])
+        tail_back.childs += [tail]
+
+        # nariz
+        nose = sg.SceneGraphNode('nose') #ventana generica
+        nose.transform = tr.matmul([tr.rotationZ(0.465),tr.translate(1.26, -0.55, 0), tr.scale(0.64,0.64,0)])
+        nose.childs += [gpu_nose_triangle]
+
+        #ala
+        wing = sg.SceneGraphNode('wing')
+        wing.transform = tr.matmul([tr.rotationZ(-0.55),tr.translate(0.1, -0.5, 0), tr.scale(0.3,1,0)])
+        wing.childs += [gpu_wing_quad]
+
 
         # Ensamblamos el mono
         mono = sg.SceneGraphNode('chansey')
         mono.transform = tr.matmul([tr.scale(0.4, 0.4, 0), tr.translate(0, -1.25, 0)])
-        mono.childs += [body, leg_izq, leg_der, eye_izq, eye_der]
+        mono.childs += [body, window_1, window_2, window_3, tail_back, nose, wing]
 
         transform_mono = sg.SceneGraphNode('chanseyTR')
         transform_mono.childs += [mono]
