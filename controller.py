@@ -12,6 +12,7 @@ from typing import Union
 class Controller(object):
     model: Union['Chansey', None]  # Con esto queremos decir que el tipo de modelo es 'Chansey' (nuestra clase) ó None
     eggs: Union['EggCreator', None]
+    HUD: Union['HUD', None]
 
     def __init__(self):
         self.model = None

@@ -16,8 +16,8 @@ if __name__ == '__main__':
     if not glfw.init():
         sys.exit()
 
-    width = 800
-    height = 800
+    width = 1200
+    height = 650
 
     window = glfw.create_window(width, height, 'Chansey E P I C', None, None)
 
@@ -46,6 +46,7 @@ if __name__ == '__main__':
 
     # HACEMOS LOS OBJETOS
     chansey = Chansey()
+    HUD = HUD()
     eggs = EggCreator()
 
     controlador.set_model(chansey)
@@ -72,6 +73,7 @@ if __name__ == '__main__':
         chansey.collide(eggs)  # ---> RECORRER TODOS LOS HUEVOS
 
         # DIBUJAR LOS MODELOS
+        HUD.draw(pipeline)
         chansey.draw(pipeline)
         eggs.draw(pipeline)
 

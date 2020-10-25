@@ -87,7 +87,7 @@ class Chansey(object):
 
         # Ensamblamos el mono
         mono = sg.SceneGraphNode('chansey')
-        mono.transform = tr.matmul([tr.scale(0.4, 0.4, 0), tr.translate(0, -1.25, 0)])
+        mono.transform = tr.matmul([tr.scale(0.1, 0.2, 0), tr.translate(-8, 2, 0)])
         mono.childs += [body, window_1, window_2, window_3, tail_back, nose, wing]
 
         transform_mono = sg.SceneGraphNode('chanseyTR')
@@ -100,11 +100,11 @@ class Chansey(object):
         sg.drawSceneGraphNode(self.model, pipeline, 'transform')
 
     def move_left(self):
-        self.model.transform = tr.translate(-0.7, 0, 0)
+        self.model.transform = tr.translate(0, -0.7, 0)
         self.pos = -1
 
     def move_right(self):
-        self.model.transform = tr.translate(0.7, 0, 0)
+        self.model.transform = tr.translate(0, 0.7, 0)
         self.pos = 1
 
     def move_center(self):
@@ -131,6 +131,34 @@ class Chansey(object):
         eggs.delete(deleted_eggs)
 
 
+class HUD(object):
+
+    def __init__(self):
+        # Figuras básicas
+        gpu_tablero_quad   = es.toGPUShape(bs.createColorQuad(0.3, 0.3, 0.3))      # gris
+
+        #creamos el tablero
+
+        tablero = sg.SceneGraphNode('tablero')
+        tablero.transform = tr.scale(2,1,1)
+        tablero.childs += [gpu_tablero_quad]
+
+        # Ensamblamos el mono
+        fondo = sg.SceneGraphNode('hud')
+        fondo.transform = tr.translate(0,-0.8,0)
+        fondo.childs += [tablero]
+
+        transform_fondo = sg.SceneGraphNode('hudTR')
+        transform_fondo.childs += [fondo]
+
+        self.model = transform_fondo
+        self.pos = 0
+
+    def draw(self, pipeline):
+        sg.drawSceneGraphNode(self.model, pipeline, 'transform')
+
+
+
 class Egg(object):
 
     def __init__(self):
@@ -143,8 +171,8 @@ class Egg(object):
         egg_tr = sg.SceneGraphNode('eggTR')
         egg_tr.childs += [egg]
 
-        self.pos_y = 1
-        self.pos_x = random.choice([-1, 0, 1])  # LOGICA
+        self.pos_x = 1
+        self.pos_y = 0  # LOGICA
         self.model = egg_tr
 
     def draw(self, pipeline):
@@ -152,7 +180,7 @@ class Egg(object):
         sg.drawSceneGraphNode(self.model, pipeline, "transform")
 
     def update(self, dt):
-        self.pos_y -= dt
+        self.pos_x -= dt
 
 
 class EggCreator(object):
