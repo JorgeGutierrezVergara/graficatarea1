@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Daniel Calderon, CC3501, 2019-2
+Daniel Calderon, CC3501, 2019-
 vertices and indices for simple shapes
 """
 
