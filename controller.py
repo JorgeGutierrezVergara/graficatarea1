@@ -13,6 +13,7 @@ class Controller(object):
     model: Union['Chansey', None]  # Con esto queremos decir que el tipo de modelo es 'Chansey' (nuestra clase) ó None
     eggs: Union['EggCreator', None]
     HUD: Union['HUD', None]
+    Ace = 0
 
     def __init__(self):
         self.model = None
@@ -32,16 +33,16 @@ class Controller(object):
             sys.exit()
 
         # Controlador modifica al modelo
-        elif key == glfw.KEY_LEFT and action == glfw.PRESS:
+        elif key == glfw.KEY_A and action == glfw.PRESS:
             # print('Move left')
-            self.model.move_left()
+            self.model.move_down()
 
-        elif key == glfw.KEY_RIGHT and action == glfw.PRESS:
+        elif key == glfw.KEY_W and action == glfw.PRESS:
             # print('Move left')
-            self.model.move_right()
+            self.model.move_up()
 
-        elif (key == glfw.KEY_LEFT or key == glfw.KEY_RIGHT) and action == glfw.RELEASE:
-            self.model.move_center()
+        #elif (key == glfw.KEY_W or key == glfw.KEY_A) and action == glfw.RELEASE:
+         #   self.model.move_center()
 
         # Raton toca la pantalla....
         else:

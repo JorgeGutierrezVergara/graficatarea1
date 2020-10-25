@@ -68,14 +68,15 @@ if __name__ == '__main__':
         glClear(GL_COLOR_BUFFER_BIT)
         eggs.create_egg()  # Aleatorio
         eggs.update(0.5 * dt)  # 0.001
+        chansey.update(dt)
 
         # Reconocer la logica
         chansey.collide(eggs)  # ---> RECORRER TODOS LOS HUEVOS
 
         # DIBUJAR LOS MODELOS
-        HUD.draw(pipeline)
         chansey.draw(pipeline)
         eggs.draw(pipeline)
+        HUD.draw(pipeline)
 
         # Once the render is done, buffers are swapped, showing only the complete scene.
         glfw.swap_buffers(window)

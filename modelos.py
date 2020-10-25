@@ -95,20 +95,39 @@ class Chansey(object):
 
         self.model = transform_mono
         self.pos = 0
+        self.y   = 0 #indica la pos visual del avion (-0.3, 0.9)
 
     def draw(self, pipeline):
         sg.drawSceneGraphNode(self.model, pipeline, 'transform')
+    
+    def modifymodel(self):
+        self.model.transform = tr.translate(0, self.y, 0)
 
-    def move_left(self):
-        self.model.transform = tr.translate(0, -0.7, 0)
+    def update(self, dt):
+        if self.pos == 1:
+            self.y += dt
+            if self.y > 0:
+                self.y = min(0.5, self.y) 
+        
+        elif self.pos == 0:
+            if self.y < 0:
+                self.y += dt
+            elif self.y > 0:
+                self.y -= dt
+
+        elif self.pos ==-1:
+            self.y -= dt
+            self.y = max(-0.6, self.y)
+        
+        self.modifymodel()
+
+    def move_down(self):
         self.pos = -1
 
-    def move_right(self):
-        self.model.transform = tr.translate(0, 0.7, 0)
+    def move_up(self):
         self.pos = 1
 
     def move_center(self):
-        self.model.transform = tr.translate(0, 0, 0)
         self.pos = 0
 
     def collide(self, eggs: 'EggCreator'):
@@ -160,19 +179,23 @@ class HUD(object):
 
 
 class Egg(object):
-
+    #creamos una montaña
     def __init__(self):
-        gpu_egg = es.toGPUShape(bs.createColorQuad(0.7, .7, .7))
+        gpu_egg = es.toGPUShape(bs.createColorTriangle(0.47, .19, .0))
+
+        #creamos una base y altura aleatoria para las montañas
+        base = random.uniform(0.5,3)
+        altura = random.uniform(0.5,2)
 
         egg = sg.SceneGraphNode('egg')
-        egg.transform = tr.scale(0.1, 0.2, 1)
+        egg.transform = tr.scale(base, altura, 1)
         egg.childs += [gpu_egg]
 
         egg_tr = sg.SceneGraphNode('eggTR')
         egg_tr.childs += [egg]
 
-        self.pos_x = 1
-        self.pos_y = 0  # LOGICA
+        self.pos_x = 2 # LOGICA
+        self.pos_y = -0.2
         self.model = egg_tr
 
     def draw(self, pipeline):
