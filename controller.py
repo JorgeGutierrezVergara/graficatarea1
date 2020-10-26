@@ -13,16 +13,21 @@ from typing import Union
 class Controller(object):
     model: Union['Chansey', None]  # Con esto queremos decir que el tipo de modelo es 'Chansey' (nuestra clase) ó None
     eggs: Union['EggCreator', None]
+    nube: Union['NubeCreator', None]
     
     def __init__(self):
         self.model = None
         self.eggs = None
+        self.nube= None
 
     def set_model(self, m):
         self.model = m
 
     def set_eggs(self, e):
         self.eggs = e
+
+    def set_nube(self, n):
+        self.nube = n
 
     def on_key(self, window, key, scancode, action, mods):
         if not (action == glfw.PRESS or action == glfw.RELEASE):

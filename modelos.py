@@ -83,7 +83,8 @@ class Chansey(object):
         wing = sg.SceneGraphNode('wing')
         wing.transform = tr.matmul([tr.rotationZ(-0.55),tr.translate(0.1, -0.5, 0), tr.scale(0.3,1,0)])
         wing.childs += [gpu_wing_quad]
-
+        
+        self.a =  0 #indica la aceleración del avión
 
         # Ensamblamos el mono
         mono = sg.SceneGraphNode('chansey')
@@ -95,33 +96,23 @@ class Chansey(object):
 
         self.model = transform_mono
         self.pos = 0 #posicion de la tecla, 1=> acelerando, -1=> desacelerando, 0=>cayendo
-        self.a =  0 #indica la aceleración del avión
 
     def draw(self, pipeline):
         sg.drawSceneGraphNode(self.model, pipeline, 'transform')
     
     def modifymodel(self):
-        self.model.transform = tr.translate(0, self.a, 0)
+        self.model.transform = tr.translate(0, max(0, self.a - 0.3),0)
 
     def update(self, dt):
         if self.pos == 1:
             self.a += dt
             if self.a > 0:
-                self.a = min(1.6, self.a) 
+                self.a = min(4, self.a) 
 
         elif self.pos == 0:
-            if abs(self.a)<0.05:
-                self.a = 0
-            else:
-                if self.a < 0:
-                    self.a += dt
-                elif self.a > 0:
-                    self.a -= dt
-
-        elif self.pos ==-1:
             self.a -= dt
-            self.a = max(-1.0, self.a) 
-        
+            self.a = max(-4, self.a)
+
         self.modifymodel()
         print(self.a)
 
@@ -431,7 +422,7 @@ class Egg(object):
         egg_tr = sg.SceneGraphNode('eggTR')
         egg_tr.childs += [egg]
 
-        self.pos_x = 2 # LOGICA
+        self.pos_x = 3 # LOGICA
         self.pos_y = -0.2
         self.model = egg_tr
 
@@ -441,6 +432,9 @@ class Egg(object):
 
     def update(self, dt):
         self.pos_x -= dt
+
+    def getx(self):
+        return self.pos_x
 
 
 class EggCreator(object):
@@ -455,9 +449,9 @@ class EggCreator(object):
         self.on = False  # Dejamos de generar huevos, si es True es porque el jugador ya perdió
 
     def create_egg(self):
-        if len(self.eggs) >= 10:  # No puede haber un máximo de 10 huevos en pantalla
+        if len(self.eggs) >= 40:  # No puede haber un máximo de 10 huevos en pantalla
             return
-        if random.random() < 0.001:
+        if random.random() < 0.005:
             self.eggs.append(Egg())
 
     def draw(self, pipeline):
@@ -471,8 +465,66 @@ class EggCreator(object):
     def delete(self, d):
         if len(d) == 0:
             return
-        remain_eggs = []
+        remain_eggs = [0]
         for k in self.eggs:  # Recorro todos los huevos
             if k not in d:  # Si no se elimina, lo añado a la lista de huevos que quedan
                 remain_eggs.append(k)
         self.eggs = remain_eggs  # Actualizo la lista
+
+class Nube(object):
+    #creamos una montaña
+    def __init__(self):
+        gpu_nube = es.toGPUShape(bs.createColorQuad(0.8, 0.8, 0.8))
+
+        #creamos una base y altura aleatoria para las montañas
+        base = random.uniform(0.1,0.5)
+        altura = random.uniform(0.1,0.5)
+
+        nube = sg.SceneGraphNode('nube')
+        nube.transform = tr.scale(base, altura, 1)
+        nube.childs += [gpu_nube]
+
+        nube_tr = sg.SceneGraphNode('nubeTR')
+        nube_tr.childs += [nube]
+
+        self.pos_x = 2 # LOGICA
+        self.pos_y = random.uniform(0.2, 1.)
+        self.model = nube_tr
+
+    def draw(self, pipeline):
+        self.model.transform = tr.translate(0.7 * self.pos_x, self.pos_y, 0)
+        sg.drawSceneGraphNode(self.model, pipeline, "transform")
+
+    def update(self, dt):
+        self.pos_x -= dt
+
+
+class NubeCreator(object):
+    nube: List['Nube']
+
+    def __init__(self):
+        self.nube = []
+        self.on = True
+
+    def create_nube(self):
+        if len(self.nube) >= 20:  # No puede haber un máximo de 10 huevos en pantalla
+            return
+        if random.random() < 0.01:
+            self.nube.append(Nube())
+
+    def draw(self, pipeline):
+        for k in self.nube:
+            k.draw(pipeline)
+
+    def update(self, dt):
+        for k in self.nube:
+            k.update(dt)
+
+    def delete(self, d):
+        if len(d) == 0:
+            return
+        remain_nube = []
+        for k in self.nube:  # Recorro todos los huevos
+            if k not in d:  # Si no se elimina, lo añado a la lista de huevos que quedan
+                remain_nube.append(k)
+        self.nube = remain_nube  # Actualizo la lista

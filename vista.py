@@ -39,7 +39,7 @@ if __name__ == '__main__':
     glUseProgram(pipeline.shaderProgram)
 
     # Setting up the clear screen color
-    glClearColor(0.85, 0.85, 0.85, 1.0)
+    glClearColor(0.34, 0.7, 1, 1.0)
 
     # Our shapes here are always fully painted
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
@@ -48,6 +48,7 @@ if __name__ == '__main__':
     chansey = Chansey()
     HUD = HUD_y_vel()
     eggs = EggCreator()
+    nube = NubeCreator()
     rev = Rev()
     alt = Alt()
     cab = Cab()
@@ -55,6 +56,7 @@ if __name__ == '__main__':
 
     controlador.set_model(chansey)
     controlador.set_eggs(eggs)
+    controlador.set_nube(nube)
 
     t0 = 0
 
@@ -65,6 +67,7 @@ if __name__ == '__main__':
         dt = ti - t0
         t0 = ti
 
+
         # Using GLFW to check for input events
         glfw.poll_events()  # OBTIENE EL INPUT --> CONTROLADOR --> MODELOS
 
@@ -72,12 +75,15 @@ if __name__ == '__main__':
         glClear(GL_COLOR_BUFFER_BIT)
         eggs.create_egg()  # Aleatorio
         eggs.update(0.5 * dt)  # 0.001
+        nube.create_nube()  # Aleatorio
+        nube.update(0.5 * dt)
         chansey.update(dt)
 
         # Reconocer la logica
         chansey.collide(eggs)  # ---> RECORRER TODOS LOS HUEVOS
 
         # DIBUJAR LOS MODELOS
+        nube.draw(pipeline)
         chansey.draw(pipeline)
         eggs.draw(pipeline)
         HUD.draw(pipeline)
