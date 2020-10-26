@@ -35,6 +35,25 @@ def createAxis(length=1.0):
 
     return Shape(vertices, indices)
 
+def createQuarterCircle():
+    # Defining the location and colors of each vertex  of the shape
+    vertices = [
+        #   positions        colors
+        1, 0, 0.0, .0, .0, .0,
+        0.923, 0.382, 0.0, .0, .0, .0,
+        0.7071, 0.7071, 0.0, .0, .0, .0,
+        0.382, 0.923, 0.0, .0, .0, .0,
+        0, 1, 0.0, .0, .0, .0]
+
+    # Defining connections among vertices
+    # We have a triangle every 3 indices specified
+    indices = [
+        0, 1, 2,
+        0, 2, 3,
+        0, 3, 4,
+        0, 4, 5]
+
+    return Shape(vertices, indices)
 
 def createRainbowTriangle():
     # Defining the location and colors of each vertex  of the shape

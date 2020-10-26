@@ -46,8 +46,11 @@ if __name__ == '__main__':
 
     # HACEMOS LOS OBJETOS
     chansey = Chansey()
-    HUD = HUD()
+    HUD = HUD_y_vel()
     eggs = EggCreator()
+    rev = Rev()
+    alt = Alt()
+    cab = Cab()
 
     controlador.set_model(chansey)
     controlador.set_eggs(eggs)
@@ -77,6 +80,9 @@ if __name__ == '__main__':
         chansey.draw(pipeline)
         eggs.draw(pipeline)
         HUD.draw(pipeline)
+        rev.draw(pipeline)
+        alt.draw(pipeline)
+        cab.draw(pipeline)
 
         # Once the render is done, buffers are swapped, showing only the complete scene.
         glfw.swap_buffers(window)

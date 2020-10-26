@@ -1,3 +1,4 @@
+  
 """
 Clase controlador, obtiene el input, lo procesa, y manda los mensajes
 a los modelos.
@@ -12,9 +13,7 @@ from typing import Union
 class Controller(object):
     model: Union['Chansey', None]  # Con esto queremos decir que el tipo de modelo es 'Chansey' (nuestra clase) ó None
     eggs: Union['EggCreator', None]
-    HUD: Union['HUD', None]
-    Ace = 0
-
+    
     def __init__(self):
         self.model = None
         self.eggs = None
@@ -41,8 +40,8 @@ class Controller(object):
             # print('Move left')
             self.model.move_up()
 
-        #elif (key == glfw.KEY_W or key == glfw.KEY_A) and action == glfw.RELEASE:
-         #   self.model.move_center()
+        elif (key == glfw.KEY_W or key == glfw.KEY_A) and action == glfw.RELEASE:
+            self.model.move_center()
 
         # Raton toca la pantalla....
         else:
