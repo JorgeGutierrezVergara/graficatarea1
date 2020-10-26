@@ -96,41 +96,34 @@ class Chansey(object):
         self.model = transform_mono
         self.pos = 0 #posicion de la tecla, 1=> acelerando, -1=> desacelerando, 0=>cayendo
         self.a =  0 #indica la aceleración del avión
-        self.y =  0 #indica la pos visual del avion (-0.3, 0.9)
-        self.vy = 0
 
     def draw(self, pipeline):
         sg.drawSceneGraphNode(self.model, pipeline, 'transform')
     
     def modifymodel(self):
-        self.model.transform = tr.translate(0, self.y, 0)
+        self.model.transform = tr.translate(0, self.a, 0)
 
     def update(self, dt):
         if self.pos == 1:
             self.a += dt
             if self.a > 0:
                 self.a = min(1.6, self.a) 
-                self.vy = (abs(self.a)**1.8) * 0.5
-                self.y = self.vy
 
-        
         elif self.pos == 0:
-            if self.a < 0:
-                self.a += dt
-                self.y = (abs(self.a)**1.8) * 0.5
-            elif self.a > 0:
-                self.a -= dt
-                self.y = (abs(self.a)**1.8) * 0.5
+            if abs(self.a)<0.05:
+                self.a = 0
+            else:
+                if self.a < 0:
+                    self.a += dt
+                elif self.a > 0:
+                    self.a -= dt
 
         elif self.pos ==-1:
             self.a -= dt
-            if self.a > 0:
-                self.a = min(1.6, self.a)
-                self.vy = (abs(self.a)**1.8) * 0.5
-                self.y = self.vy
+            self.a = max(-1.0, self.a) 
         
         self.modifymodel()
-        print(self.y)
+        print(self.a)
 
     def move_down(self):
         self.pos = -1
