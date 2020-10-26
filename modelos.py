@@ -325,6 +325,39 @@ class Cab(object):
     def draw(self, pipeline):
         sg.drawSceneGraphNode(self.model, pipeline, 'transform')
 
+class Boton(object):
+    def __init__(self):
+        # Figuras básicas
+        gpu_red         = es.toGPUShape(bs.createColorQuad(1,0,0))
+        gpu_grey        = es.toGPUShape(bs.createColorQuad(0.7,0.7,0.7))
+        gpu_dark_blue   = es.toGPUShape(bs.createColorQuad(0.,0.1,0.4))
+        #creamos un medidor de revoluciones
+        rojo = sg.SceneGraphNode('rojo')  # cuarto de circulo generico
+        rojo.transform = tr.matmul([tr.translate(0.3,0,0),tr.uniformScale(0.15)])
+        rojo.childs += [gpu_red]
+
+        dblue = sg.SceneGraphNode('dblue')
+        dblue.transform = tr.matmul([tr.translate(0.3,-0.3,0),tr.uniformScale(0.15)])
+        dblue.childs += [gpu_dark_blue]
+
+        grey = sg.SceneGraphNode('grey')
+        grey.transform = tr.matmul([tr.translate(0,-0.3,0),tr.uniformScale(0.15)])
+        grey.childs += [gpu_grey]
+
+        # Ensamblamos el mono
+        bot = sg.SceneGraphNode('bot')
+        bot.transform = tr.matmul([tr.translate(0.65, -0.55, 0),tr.scale(0.7,1,1)])
+        bot.childs += [rojo, dblue, grey ]
+
+        translate_bot = sg.SceneGraphNode('botTR')
+        translate_bot.childs += [bot]
+
+        self.model = bot
+        self.pos = 0
+
+    def draw(self, pipeline):
+        sg.drawSceneGraphNode(self.model, pipeline, 'transform')
+
 class Rev(object):
     def __init__(self):
         # Figuras básicas

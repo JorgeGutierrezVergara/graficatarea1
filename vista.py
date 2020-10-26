@@ -51,6 +51,7 @@ if __name__ == '__main__':
     rev = Rev()
     alt = Alt()
     cab = Cab()
+    bot = Boton()
 
     controlador.set_model(chansey)
     controlador.set_eggs(eggs)
@@ -83,6 +84,7 @@ if __name__ == '__main__':
         rev.draw(pipeline)
         alt.draw(pipeline)
         cab.draw(pipeline)
+        bot.draw(pipeline)
 
         # Once the render is done, buffers are swapped, showing only the complete scene.
         glfw.swap_buffers(window)
